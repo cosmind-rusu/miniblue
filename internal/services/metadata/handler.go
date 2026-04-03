@@ -2,7 +2,6 @@ package metadata
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -22,52 +21,50 @@ func (h *Handler) Register(r chi.Router) {
 	r.Get("/metadata/endpoints", h.Endpoints)
 }
 
-func baseURL() string {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "4566"
-	}
-	host := os.Getenv("LOCAL_AZURE_HOST")
-	if host == "" {
-		host = "https://localhost"
-	}
-	return fmt.Sprintf("%s:%s", host, port)
-}
-
 func (h *Handler) Endpoints(w http.ResponseWriter, r *http.Request) {
-	base := baseURL()
+	httpPort := os.Getenv("PORT")
+	if httpPort == "" {
+		httpPort = "4566"
+	}
+	tlsPort := os.Getenv("TLS_PORT")
+	if tlsPort == "" {
+		tlsPort = "4567"
+	}
+
+	httpBase := "http://localhost:" + httpPort
+	httpsBase := "https://localhost:" + tlsPort
 
 	endpoints := map[string]interface{}{
 		"galleryEndpoint":                       nil,
-		"graphEndpoint":                         base,
-		"portalEndpoint":                        base,
+		"graphEndpoint":                         httpBase,
+		"portalEndpoint":                        httpBase,
 		"authentication": map[string]interface{}{
-			"loginEndpoint": base,
-			"audiences":     []string{base},
+			"loginEndpoint": httpsBase,
+			"audiences":     []string{httpBase},
 		},
-		"media":                                 base,
+		"media":                                 httpBase,
 		"vmImageAliasDoc":                       "",
-		"resourceManagerEndpoint":               base,
-		"sqlManagementEndpoint":                  base,
-		"batchResourceId":                        base,
-		"storageEndpointSuffix":                  "localhost",
-		"keyVaultDnsSuffix":                      "localhost",
-		"sqlServerHostnameSuffix":                "localhost",
-		"mysqlServerEndpoint":                    base,
-		"postgresqlServerEndpoint":               base,
-		"cosmosDBDnsSuffix":                      "localhost",
-		"containerRegistryDnsSuffix":             "localhost",
-		"serviceBusEndpointSuffix":               "localhost",
-		"activeDirectoryEndpoint":                base,
-		"activeDirectoryResourceId":              base,
-		"activeDirectoryGraphResourceId":         base,
-		"microsoftGraphResourceId":               base,
-		"appInsightsResourceId":                  base,
-		"appInsightsTelemetryChannelResourceId":  base,
-		"logAnalyticsResourceId":                 base,
-		"attestationResourceId":                  base,
-		"synapseAnalyticsResourceId":             base,
-		"ossrdbmsResourceId":                     base,
+		"resourceManagerEndpoint":               httpBase,
+		"sqlManagementEndpoint":                 httpBase,
+		"batchResourceId":                       httpBase,
+		"storageEndpointSuffix":                 "localhost",
+		"keyVaultDnsSuffix":                     "localhost",
+		"sqlServerHostnameSuffix":               "localhost",
+		"mysqlServerEndpoint":                   httpBase,
+		"postgresqlServerEndpoint":              httpBase,
+		"cosmosDBDnsSuffix":                     "localhost",
+		"containerRegistryDnsSuffix":            "localhost",
+		"serviceBusEndpointSuffix":              "localhost",
+		"activeDirectoryEndpoint":               httpsBase,
+		"activeDirectoryResourceId":             httpBase,
+		"activeDirectoryGraphResourceId":        httpBase,
+		"microsoftGraphResourceId":              httpBase,
+		"appInsightsResourceId":                 httpBase,
+		"appInsightsTelemetryChannelResourceId": httpBase,
+		"logAnalyticsResourceId":                httpBase,
+		"attestationResourceId":                 httpBase,
+		"synapseAnalyticsResourceId":            httpBase,
+		"ossrdbmsResourceId":                    httpBase,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -25,52 +25,38 @@ func main() {
 	if port == "" {
 		port = "4566"
 	}
+	tlsPort := os.Getenv("TLS_PORT")
+	if tlsPort == "" {
+		tlsPort = "4567"
+	}
 
 	srv := server.New()
+	handler := srv.Handler()
 
-	// Check if TLS cert/key are provided
-	certFile := os.Getenv("TLS_CERT_FILE")
-	keyFile := os.Getenv("TLS_KEY_FILE")
-
-	// Default to TLS with self-signed cert (needed for az CLI MSAL)
-	useTLS := os.Getenv("LOCAL_AZURE_NO_TLS") != "true"
-
-	addr := ":" + port
-
-	if useTLS {
-		var tlsConfig *tls.Config
-
-		if certFile != "" && keyFile != "" {
-			log.Printf("local-azure starting on https://localhost:%s (custom cert)", port)
-			if err := http.ListenAndServeTLS(addr, certFile, keyFile, srv.Handler()); err != nil {
-				log.Fatal(err)
-			}
-			return
+	// Always start HTTP
+	go func() {
+		log.Printf("local-azure HTTP  on http://localhost:%s", port)
+		if err := http.ListenAndServe(":"+port, handler); err != nil {
+			log.Fatal(err)
 		}
+	}()
 
-		// Generate self-signed cert
-		log.Printf("local-azure starting on https://localhost:%s (self-signed cert)", port)
-		cert, err := generateSelfSignedCert()
-		if err != nil {
-			log.Fatalf("Failed to generate self-signed cert: %v", err)
-		}
-		tlsConfig = &tls.Config{
+	// Always start HTTPS (self-signed) on TLS_PORT
+	log.Printf("local-azure HTTPS on https://localhost:%s (self-signed)", tlsPort)
+	cert, err := generateSelfSignedCert()
+	if err != nil {
+		log.Fatalf("Failed to generate self-signed cert: %v", err)
+	}
+
+	tlsServer := &http.Server{
+		Addr:    ":" + tlsPort,
+		Handler: handler,
+		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},
-		}
-
-		server := &http.Server{
-			Addr:      addr,
-			Handler:   srv.Handler(),
-			TLSConfig: tlsConfig,
-		}
-		if err := server.ListenAndServeTLS("", ""); err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		log.Printf("local-azure starting on http://localhost:%s (no TLS)", port)
-		if err := http.ListenAndServe(addr, srv.Handler()); err != nil {
-			log.Fatal(err)
-		}
+		},
+	}
+	if err := tlsServer.ListenAndServeTLS("", ""); err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -91,12 +77,10 @@ func generateSelfSignedCert() (tls.Certificate, error) {
 			Organization: []string{"local-azure"},
 			CommonName:   "localhost",
 		},
-		NotBefore: time.Now(),
-		NotAfter:  time.Now().Add(365 * 24 * time.Hour),
-		KeyUsage:  x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment,
-		ExtKeyUsage: []x509.ExtKeyUsage{
-			x509.ExtKeyUsageServerAuth,
-		},
+		NotBefore:             time.Now(),
+		NotAfter:              time.Now().Add(365 * 24 * time.Hour),
+		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment,
+		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 		BasicConstraintsValid: true,
 		DNSNames:              []string{"localhost"},
 		IPAddresses:           []net.IP{net.IPv4(127, 0, 0, 1), net.IPv6loopback},

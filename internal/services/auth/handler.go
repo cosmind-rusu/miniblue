@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -21,11 +20,11 @@ func NewHandler(s *store.Store) *Handler {
 }
 
 func (h *Handler) Register(r chi.Router) {
-	// OAuth2 token endpoints - both at root and under /auth prefix
+	// OAuth2 token endpoints
 	r.Post("/{tenantId}/oauth2/v2.0/token", h.Token)
 	r.Post("/{tenantId}/oauth2/token", h.Token)
 
-	// OpenID Connect discovery - at root (MSAL expects authority + /.well-known/...)
+	// OpenID Connect discovery
 	r.Get("/{tenantId}/.well-known/openid-configuration", h.OpenIDConfig)
 	r.Get("/{tenantId}/v2.0/.well-known/openid-configuration", h.OpenIDConfig)
 	r.Get("/common/.well-known/openid-configuration", h.OpenIDConfigCommon)
@@ -39,16 +38,12 @@ func (h *Handler) Register(r chi.Router) {
 	r.Get("/{tenantId}/discovery/instance", h.DiscoveryInstance)
 }
 
-func baseURL() string {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "4566"
+func httpsBase() string {
+	tlsPort := os.Getenv("TLS_PORT")
+	if tlsPort == "" {
+		tlsPort = "4567"
 	}
-	host := os.Getenv("LOCAL_AZURE_HOST")
-	if host == "" {
-		host = "https://localhost"
-	}
-	return fmt.Sprintf("%s:%s", host, port)
+	return "https://localhost:" + tlsPort
 }
 
 func (h *Handler) Token(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +80,7 @@ func (h *Handler) OpenIDConfigCommon(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) writeOpenIDConfig(w http.ResponseWriter, tenantId string) {
-	base := baseURL()
+	base := httpsBase()
 	config := map[string]interface{}{
 		"issuer":                                base + "/" + tenantId,
 		"authorization_endpoint":                base + "/" + tenantId + "/oauth2/v2.0/authorize",
@@ -126,7 +121,7 @@ func (h *Handler) Authorize(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) DiscoveryInstance(w http.ResponseWriter, r *http.Request) {
-	base := baseURL()
+	base := httpsBase()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"tenant_discovery_endpoint": base + "/common/.well-known/openid-configuration",
@@ -134,7 +129,7 @@ func (h *Handler) DiscoveryInstance(w http.ResponseWriter, r *http.Request) {
 			{
 				"preferred_network": "localhost",
 				"preferred_cache":   "localhost",
-				"aliases":           []string{"localhost", "localhost:4566"},
+				"aliases":           []string{"localhost", "localhost:4567"},
 			},
 		},
 	})
