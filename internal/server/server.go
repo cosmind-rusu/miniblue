@@ -2,9 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -42,6 +40,10 @@ func New() *Server {
 	return s
 }
 
+func (s *Server) Handler() http.Handler {
+	return s.router
+}
+
 func (s *Server) setupMiddleware() {
 	s.router.Use(middleware.Logger)
 	s.router.Use(middleware.Recoverer)
@@ -57,7 +59,7 @@ func (s *Server) setupMiddleware() {
 func (s *Server) setupRoutes() {
 	s.router.Get("/health", s.healthHandler)
 
-	// Cloud metadata + auth (needed for az CLI custom cloud registration)
+	// Cloud metadata + auth (needed for az CLI custom cloud)
 	metadata.NewHandler(s.store).Register(s.router)
 	auth.NewHandler(s.store).Register(s.router)
 
@@ -88,13 +90,4 @@ func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
 		"status":   "running",
 		"services": services,
 	})
-}
-
-func (s *Server) Run() error {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "4566"
-	}
-	log.Printf("local-azure starting on :%s", port)
-	return http.ListenAndServe(":"+port, s.router)
 }

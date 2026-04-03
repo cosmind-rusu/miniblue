@@ -22,32 +22,32 @@ func (h *Handler) Register(r chi.Router) {
 	r.Get("/metadata/endpoints", h.Endpoints)
 }
 
-func (h *Handler) baseURL() string {
+func baseURL() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "4566"
 	}
 	host := os.Getenv("LOCAL_AZURE_HOST")
 	if host == "" {
-		host = "http://localhost"
+		host = "https://localhost"
 	}
 	return fmt.Sprintf("%s:%s", host, port)
 }
 
 func (h *Handler) Endpoints(w http.ResponseWriter, r *http.Request) {
-	base := h.baseURL()
+	base := baseURL()
 
 	endpoints := map[string]interface{}{
-		"galleryEndpoint":                        nil,
-		"graphEndpoint":                          base,
-		"portalEndpoint":                         base,
+		"galleryEndpoint":                       nil,
+		"graphEndpoint":                         base,
+		"portalEndpoint":                        base,
 		"authentication": map[string]interface{}{
-			"loginEndpoint": base + "/auth",
+			"loginEndpoint": base,
 			"audiences":     []string{base},
 		},
-		"media":                                  base,
-		"vmImageAliasDoc":                        "",
-		"resourceManagerEndpoint":                base,
+		"media":                                 base,
+		"vmImageAliasDoc":                       "",
+		"resourceManagerEndpoint":               base,
 		"sqlManagementEndpoint":                  base,
 		"batchResourceId":                        base,
 		"storageEndpointSuffix":                  "localhost",
@@ -58,7 +58,7 @@ func (h *Handler) Endpoints(w http.ResponseWriter, r *http.Request) {
 		"cosmosDBDnsSuffix":                      "localhost",
 		"containerRegistryDnsSuffix":             "localhost",
 		"serviceBusEndpointSuffix":               "localhost",
-		"activeDirectoryEndpoint":                base + "/auth",
+		"activeDirectoryEndpoint":                base,
 		"activeDirectoryResourceId":              base,
 		"activeDirectoryGraphResourceId":         base,
 		"microsoftGraphResourceId":               base,

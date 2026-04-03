@@ -9,8 +9,10 @@ services:
     environment:
       - PORT=4566
       - LOG_LEVEL=info
+      # Set LOCAL_AZURE_NO_TLS=true to disable TLS (default: TLS enabled with self-signed cert)
+      # - LOCAL_AZURE_NO_TLS=true
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4566/health"]
+      test: ["CMD", "wget", "--no-check-certificate", "-q", "--spider", "https://localhost:4566/health"]
       interval: 10s
       timeout: 5s
       retries: 3
