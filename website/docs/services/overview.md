@@ -1,6 +1,6 @@
 # Services Overview
 
-miniblue emulates 19 Azure services on a single port. All services use in-memory storage and require no authentication.
+miniblue emulates 21 Azure services on a single port. All services use in-memory storage and require no authentication.
 
 ## Service status
 
@@ -20,6 +20,11 @@ miniblue emulates 19 Azure services on a single port. All services use in-memory
 | Event Grid | `Microsoft.EventGrid` | Done | Yes | Yes |
 | App Configuration | `Microsoft.AppConfiguration` | Done | -- | Yes |
 | Managed Identity | IMDS | Done | -- | Yes |
+| [DB for PostgreSQL](database-postgresql.md) | `Microsoft.DBforPostgreSQL` | Done | Yes | -- |
+| [DB for MySQL](database-mysql.md) | `Microsoft.DBforMySQL` | Done | Yes | -- |
+| [Azure SQL Database](database-sql.md) | `Microsoft.Sql` | Done | Yes | -- |
+| [Azure Cache for Redis](redis.md) | `Microsoft.Cache` | Done | Yes | -- |
+| [Container Instances](container-instances.md) | `Microsoft.ContainerInstance` | Done | Yes | -- |
 
 ### What "ARM API" and "Data Plane" mean
 

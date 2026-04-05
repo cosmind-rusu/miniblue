@@ -43,6 +43,8 @@ nav:
     - Configuration: getting-started/configuration.md
   - Guides:
     - Terraform: guides/terraform.md
+    - Pulumi: guides/pulumi.md
+    - SDKs (Python, Go, JS): guides/sdk.md
     - azlocal CLI: guides/azlocal.md
     - CLI Reference: guides/azure-cli.md
     - Docker: guides/docker.md
@@ -57,6 +59,11 @@ nav:
     - Container Registry: services/container-registry.md
     - Cosmos DB: services/cosmos-db.md
     - Service Bus: services/service-bus.md
+    - DB for PostgreSQL: services/database-postgresql.md
+    - DB for MySQL: services/database-mysql.md
+    - Azure SQL Database: services/database-sql.md
+    - Azure Cache for Redis: services/redis.md
+    - Container Instances: services/container-instances.md
   - Architecture: architecture/overview.md
   - Contributing: contributing.md
 

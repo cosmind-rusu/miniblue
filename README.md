@@ -47,9 +47,10 @@ That is 5 separate tools, 5 different Docker images, 5 different ports and confi
 | Docker image | ~1GB | ~200MB | ~300MB | **~8MB (scratch)** |
 | Startup time | ~10s | ~5s | ~3s | **<1s** |
 | CLI wrapper | awslocal | awslocal | N/A | azlocal |
-| Real backends | DynamoDB Local | No | No | **Postgres, Redis, Docker** |
-| Terraform | N/A (AWS) | N/A (AWS) | No | **Yes (5 resource types)** |
-| Persistent storage | Pro only | No | Volume mount | **Postgres backend** |
+| Real backends | DynamoDB Local | RDS, S3, SQS | No | **Postgres, Redis, Docker** |
+| Terraform | Yes | Yes | No | **Yes (6 resource types)** |
+| Pulumi | Yes | No | No | **Yes** |
+| Persistent storage | Pro only | Partial | Volume mount | **File + Postgres** |
 | License | BSL (was Apache) | MIT | MIT | MIT |
 | ARM API support | N/A (AWS) | N/A (AWS) | No | **Yes** |
 
@@ -81,8 +82,8 @@ miniblue is an **API emulator** for local development and testing. It does not r
 
 - **No VMs** - Azure VMs, VMSS, and compute are not emulated
 - **No real networking** - VNets/subnets are API stubs, no actual network layer
-- **No real containers** - AKS/ACI endpoints are not supported (yet)
-- **No data persistence** - all state is in-memory and lost on restart
+- **No real containers** - AKS is not emulated (ACI runs real Docker containers when available)
+- **Ephemeral by default** - state is in-memory unless `PERSISTENCE=1` or `DATABASE_URL` is set
 - **Not production-ready** - never expose miniblue to the internet
 
 miniblue is designed for **CI pipelines, integration tests, and local development** where you need Azure API compatibility without an Azure account.
@@ -239,12 +240,32 @@ resource "azurerm_virtual_network" "example" {
 
 See [examples/terraform/](examples/terraform/) for a full working example.
 
-### Go SDK
+### Pulumi
 
-```go
-// Override the endpoint
-endpoint := "http://localhost:4566"
+```bash
+cd examples/pulumi-python
+export PULUMI_CONFIG_PASSPHRASE=""
+pulumi login --local
+pulumi stack init dev
+pulumi up --yes
 ```
+
+See [examples/pulumi-python/](examples/pulumi-python/) for the full example.
+
+### SDKs (Python, Go, JavaScript)
+
+```bash
+# Python
+cd examples/python && python3 example.py
+
+# Go
+cd examples/go && go run main.go
+
+# JavaScript
+node examples/javascript/example.js
+```
+
+See [examples/](examples/) for all SDK examples.
 
 ## CLI Usage
 
@@ -283,9 +304,13 @@ For Terraform, use the `metadata_host` provider config (see Terraform section ab
 | `DATABASE_URL` | (none) | PostgreSQL backend for persistent storage |
 | `POSTGRES_URL` | (none) | Real PostgreSQL for DB for PostgreSQL service |
 | `REDIS_URL` | (none) | Real Redis for Azure Cache for Redis service |
+| `PERSISTENCE` | (none) | Set to `1` for file-based state persistence |
+| `MINIBLUE_SAVE_INTERVAL` | `30s` | Auto-save interval when `PERSISTENCE=1` |
+| `SERVICES` | (all) | Comma-separated list of services to enable |
 | `LOCAL_AZURE_ENDPOINT` | `http://localhost:4566` | azlocal CLI endpoint override |
 | `MINIBLUE_SAVE_INTERVAL` | `30s` | Interval for auto-saving state when `PERSISTENCE=1` (e.g. `10s`, `1m`) |
 | `LOCAL_AZURE_CERT_DIR` | `~/.miniblue` | Directory for TLS certificate storage |
+| `MINIBLUE_INIT_DIR` | `/etc/miniblue/init/ready.d` | Init hook scripts directory |
 
 ## Ports
 
@@ -302,12 +327,13 @@ Adding a new service is straightforward - each service is its own Go package und
 
 ## Roadmap
 
-- [ ] Persistent storage (file-backed)
-- [ ] Azure SDK wire-compatibility improvements
-- [ ] More services (Redis Cache, App Service, AKS, etc.)
-- [ ] Terraform provider integration tests
-- [ ] Web UI for visualising resources
+- [x] Persistent storage (`PERSISTENCE=1` or `DATABASE_URL`)
 - [x] Pulumi integration (see `examples/pulumi-python/`)
+- [x] Redis Cache, SQL Database, MySQL, PostgreSQL, Container Instances
+- [x] Helm chart for Kubernetes
+- [ ] Web UI for visualising resources
+- [ ] More services (App Service, AKS, Storage Accounts)
+- [ ] Azure SDK wire-compatibility test suite
 
 ## License
 
