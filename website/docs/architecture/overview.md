@@ -1,5 +1,9 @@
 # Architecture
 
+## Diagram
+
+<img src="diagram.svg" alt="miniblue architecture" width="100%" />
+
 ## Request Flow
 
 ```
