@@ -167,9 +167,9 @@ make docker-run
 | Size | ~15 MB |
 | Entrypoint | `/miniblue` |
 | Exposed port | `4566` |
-| User | `root` (Alpine default) |
+| User | `65534` (non-root, scratch) |
 
-The image uses a two-stage build: Go compilation in `golang:1.26-alpine`, then the static binary is copied into a minimal Alpine image.
+The image uses a two-stage build: Go compilation in `golang:1.26-alpine`, then the static binary is copied into a scratch (empty) image.
 
 ## Stopping and removing
 

@@ -49,7 +49,7 @@ azlocal health
 {
   "services": ["subscriptions","tenants","resourcegroups","blob","table","queue","keyvault","cosmosdb","servicebus","functions","network","dns","acr","eventgrid","appconfig","identity"],
   "status": "running",
-  "version": "0.2.0"
+  "version": "0.2.5"
 }
 ```
 
@@ -78,7 +78,7 @@ azlocal group delete --name myRG --subscription my-sub-id
 ```
 
 !!! note
-    If `--subscription` is omitted, it defaults to `default`.
+    If `--subscription` is omitted, it defaults to `00000000-0000-0000-0000-000000000000`.
 
 ---
 
@@ -154,7 +154,7 @@ azlocal network vnet list --resource-group myRG
 azlocal network vnet delete --name my-vnet --resource-group myRG
 ```
 
-All network commands require `--resource-group`. Optionally pass `--subscription` (defaults to `default`).
+All network commands require `--resource-group`. Optionally pass `--subscription` (defaults to `00000000-0000-0000-0000-000000000000`).
 
 ---
 
