@@ -92,6 +92,7 @@ func (h *Handler) DeleteContainer(w http.ResponseWriter, r *http.Request) {
 	account := chi.URLParam(r, "accountName")
 	container := chi.URLParam(r, "containerName")
 	h.store.Delete(h.containerKey(account, container))
+	h.store.DeleteByPrefix("blob:blob:" + account + ":" + container + ":")
 	w.WriteHeader(http.StatusAccepted)
 }
 

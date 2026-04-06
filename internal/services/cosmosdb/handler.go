@@ -74,7 +74,13 @@ func (h *Handler) CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.store.Set(h.key(account, db, coll, id), doc)
+	k := h.key(account, db, coll, id)
+	if h.store.Exists(k) {
+		azerr.Conflict(w, "Microsoft.DocumentDB/documents", id)
+		return
+	}
+
+	h.store.Set(k, doc)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(doc)
 }
