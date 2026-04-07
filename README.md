@@ -11,7 +11,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/moabukar/miniblue/actions/workflows/ci.yml"><img src="https://github.com/moabukar/miniblue/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://hub.docker.com/r/moabukar/miniblue"><img src="https://img.shields.io/badge/docker-moabukar%2Fminiblue-blue?logo=docker" alt="Docker"></a>
-  <a href="https://moabukar.github.io/miniblue"><img src="https://img.shields.io/badge/docs-moabukar.github.io%2Fminiblue-blue" alt="Docs"></a>
+  <a href="https://miniblue.io"><img src="https://img.shields.io/badge/docs-miniblue.io-blue" alt="Docs"></a>
 </p>
 
 <p align="center">Local Azure development. One binary. No account needed.</p>
@@ -106,20 +106,20 @@ See [examples/terraform/](examples/terraform/) for full examples including three
 | `SERVICES` | all | Comma-separated list to enable selectively |
 | `PERSISTENCE` | off | Set to `1` for file-based persistence |
 
-Full configuration reference in the [docs](https://moabukar.github.io/miniblue/getting-started/configuration/).
+Full configuration reference in the [docs](https://miniblue.io/getting-started/configuration/).
 
 ## Documentation
 
-Full docs at **[moabukar.github.io/miniblue](https://moabukar.github.io/miniblue)** covering:
+Full docs at **[miniblue.io](https://miniblue.io)** covering:
 
-- [Installation](https://moabukar.github.io/miniblue/getting-started/installation/) (Homebrew, Docker, binary, Helm)
-- [Quick Start](https://moabukar.github.io/miniblue/getting-started/quickstart/)
-- [Terraform Guide](https://moabukar.github.io/miniblue/guides/terraform/)
-- [Pulumi Guide](https://moabukar.github.io/miniblue/guides/pulumi/)
-- [SDK Guide](https://moabukar.github.io/miniblue/guides/sdk/) (Python, Go, JavaScript)
-- [CLI Reference](https://moabukar.github.io/miniblue/guides/azure-cli/)
-- [API Parity Matrix](https://moabukar.github.io/miniblue/services/parity/)
-- [Architecture](https://moabukar.github.io/miniblue/architecture/overview/)
+- [Installation](https://miniblue.io/getting-started/installation/) (Homebrew, Docker, binary, Helm)
+- [Quick Start](https://miniblue.io/getting-started/quickstart/)
+- [Terraform Guide](https://miniblue.io/guides/terraform/)
+- [Pulumi Guide](https://miniblue.io/guides/pulumi/)
+- [SDK Guide](https://miniblue.io/guides/sdk/) (Python, Go, JavaScript)
+- [CLI Reference](https://miniblue.io/guides/azure-cli/)
+- [API Parity Matrix](https://miniblue.io/services/parity/)
+- [Architecture](https://miniblue.io/architecture/overview/)
 
 ## Contributing
 
