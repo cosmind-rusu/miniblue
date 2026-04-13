@@ -4,15 +4,23 @@ All notable changes to miniblue are documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.3.0] - 2026-04-14
 
 ### Added
 - Public IP Addresses service (`Microsoft.Network/publicIPAddresses`) with full CRUD, static/dynamic allocation
 - Network Security Groups service (`Microsoft.Network/networkSecurityGroups`) with security rules and cascade delete
 - Azure Load Balancer service (`Microsoft.Network/loadBalancers`) with frontend IPs, backend pools, rules and probes
-- Terraform example for load balancer (`examples/terraform/loadbalancer.tf`)
 - Application Gateway service (`Microsoft.Network/applicationGateways`) with full L7 config
-- Terraform example for application gateway (`examples/terraform/appgateway.tf`)
+- Azure Storage Accounts ARM service with shared key auth (contributed by @abusarah-tech)
+- Terraform examples for load balancer and application gateway
+- Terraform example for storage accounts
+- .NET example using HttpClient (contributed by @sa-es-ir)
+- E2E test suite for storage accounts
+- `azlocal` CLI commands for storage account operations
+
+### Changed
+- Service count: 21 to 26
+- Blob handler refactored to work under storage accounts
 
 ## [0.2.0] - 2026-04-04
 
@@ -64,5 +72,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions follow 
 - ARM API versioning middleware
 - Azure-compatible error responses
 
+[0.3.0]: https://github.com/moabukar/miniblue/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/moabukar/miniblue/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/moabukar/miniblue/releases/tag/v0.1.0
