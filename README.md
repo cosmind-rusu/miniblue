@@ -136,7 +136,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Each service is its own Go package under
 
 miniblue is sponsored by [CoderCo](https://coderco.io).
 
-Want to sponsor this project? [Get in touch](https://github.com/moabukar/miniblue/discussions).
+Want to sponsor this project? Reach out at devopsbymo@gmail.com.
 
 ## License
 
