@@ -34,7 +34,7 @@ Priorities shift based on community feedback. Open an issue or discussion if som
 - **Service Bus subscriptions and dead-letter** - complete the messaging story
 - **Key Vault keys and certificates** - extend beyond secrets
 - **Cosmos DB query language** - basic SQL query support
-- **Multi-subscription support** - allow creating and switching between subscriptions
+- **Multi-tenancy** - support multiple tenants, subscriptions and management groups like real Azure. Allow creating/switching tenants and subscriptions for realistic multi-account testing
 - **ARM template deployment** - accept and process ARM template JSON
 
 ## Later (exploratory)
