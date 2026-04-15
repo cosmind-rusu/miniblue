@@ -128,6 +128,17 @@ Full docs at **[miniblue.io](https://miniblue.io)** covering:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Each service is its own Go package under `internal/services/`.
 
+## Sponsors
+
+<p>
+  <!-- CoderCo logo placeholder -->
+  <a href="https://coderco.io"><strong>CoderCo</strong></a>
+</p>
+
+miniblue is sponsored by [CoderCo](https://coderco.io).
+
+Want to sponsor this project? [Get in touch](https://github.com/moabukar/miniblue/discussions).
+
 ## License
 
 MIT - see [LICENSE](LICENSE).
